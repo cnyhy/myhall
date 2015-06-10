@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+<mapper id="123" author="www">
+    <sql 	key="demoResult"--sql节点惟一标识，默认为key+序列号
+            operator="query"--可以为空，query/execute，查询和执行，为空时为execute
+            resultType="string"--sqlType为query，返回值类型，可以是string/map/list，默认为空
+            dynamic="true"--可以为空，true/false,默认为false，是否是动态sql，为动态sql时候，请
+        >
+        select 
+        <!-- 动态sql需要设置该值  query_count不能改变-->
+        <isNotEmpty property="query_count">  
+        	count(1) 
+        </isNotEmpty>
+        <isEmpty property="query_count">  
+        	* 
+        </isEmpty>  
+        from demo_tab 
+        where  1=1 
+         <!-- 不为空则新增该条件-->
+         <isNotEmpty property="demo_str_field1">  
+          	and demo_field1=#{"demo_field1"}
+         </isNotEmpty>
+          <!-- 为空则新增该条件-->
+         <isEmpty property="demo_str_field2">  
+          	and demo_field2=#{"demo_field2"}
+         </isEmpty>
+         <!-- 参数值和比较值相同时候新增该条件-->
+          <isEqual property="demo_str_field2" compareValue="1">  
+          	and demo_field1=#{"demo_field2"}
+         </isEqual>
+         <!-- 参数值和比较值不相同时候该条件-->
+          <isNotEqual property="demo_str_field2" compareValue="value1">  
+          	and demo_field1=#{"demo_field2"}
+         </isNotEqual>
+         <!-- 两属性比较-->
+          <isNotEqual property="demo_str_field2" compareProperty="demo_str_field1">  
+          	and demo_field1=#{"demo_field2"}
+         </isNotEqual>
+       <isEmpty property="query_count">  
+		<!-- string,int,float,double,后面类型类型可以为空，默认为string-->
+        	limit #{pageStart,int}, #{numPerPage,int}
+       </isEmpty>  
+    </sql>
+</mapper>
+
+
+
+<mapper id="124" author="www">
+    <sql     key="urltab" 
+            operator="query" 
+            resultType="list" 
+            dynamic="true" 
+        >
+        select * from (select 
+     <isNotEmpty property="query_count">  
+        	count(1) 
+        </isNotEmpty>
+        <isEmpty property="query_count">  
+        	a.*,rownum rn 
+        </isEmpty>  
+        from sys_url_tab a
+        where  1=1 
+<isNotEmpty property="q_url_id">
+		and url_id=#{q_url_id}
+	</isNotEmpty>
+<isNotEmpty property="q_title">
+		and title like '%${q_title}%'
+	</isNotEmpty>
+ <isEmpty property="query_count">  
+       and #{page_end,int}>=rownum 
+</isEmpty>
+      )
+      where 1=1 
+ <isEmpty property="query_count">  
+and rn >#{page_start,int}
+</isEmpty>
+    </sql>
+</mapper>
+</mappers>

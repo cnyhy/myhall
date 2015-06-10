@@ -1,0 +1,152 @@
+/*icon Style begin */
+.add {
+    background-image:url(../images/icon/16/add.gif) !important;
+}
+.edit{
+	background-image:url(../images/icon/16/user_delete.gif) !important;
+}
+.save{
+	background-image:url(../images/icon/16/save.gif) !important;
+}
+.failed{
+	background-image:url(../images/icon/16/failed.gif) !important;
+}
+.remove {
+    background-image:url(../images/icon/16/delete.gif) !important;
+}
+.detailInfo {
+    background-image:url(../images/icon/16/details.gif) !important;
+}
+.user-delete {
+    background-image:url(../images/icon/16/user_delete.gif) !important;
+}
+.excel {
+	background-image:url(../images/icon/16/excel.gif) !important;
+}
+.word {
+	background-image:url(../images/icon/16/word.png) !important;
+}
+.node1 {
+    background-image:url(../images/icon/16/page-gear.png) !important;
+}
+.node2 {
+    background-image:url(../images/icon/16/top_personalty.gif) !important;
+}
+
+.organ-tree-icon{
+	background-image:url(../images/icon/16/organ-tree.gif ) !important;
+}
+
+.dept-tree-icon{
+	background-image:url(../images/icon/16/dept-tree.gif ) !important;
+}
+
+.post-tree-icon{
+	background-image:url(../images/icon/16/post-tree.gif ) !important;
+}
+.all-select{
+	background-image:url(../images/icon/16/allSelect.gif ) !important;
+}
+.all-cancel{
+	background-image:url(../images/icon/16/allCancel.gif ) !important;
+}
+.arrow-in{
+	background-image:url(../images/icon/16/arrow-in.gif ) !important;
+}
+
+.arrow-out{
+	background-image:url(../images/icon/16/arrow-out.gif ) !important;
+}
+.qrcode{
+	background-image:url(../images/icon/16/qrcode.gif ) !important;
+}
+.refresh-small{
+	background-image:url(../images/icon/16/refresh-small.gif ) !important;
+}
+
+.table-edit{
+	background-image:url(../images/icon/16/table-edit.png) !important;
+}
+
+.icon-role{
+	background-image:url(../images/icon/16/role.png) !important;
+}
+
+.icon-user{
+	background-image:url(../images/icon/16/user.png) !important;
+}
+
+.icon-group{
+	background-image:url(../images/icon/16/group.png) !important;
+}
+.nav {
+	background-image: url(../images/icon/16/folder_go.png) !important;
+}
+.icon-up{
+	background-image:url(../images/icon/16/arrow-up.png) !important;
+}
+
+.icon-down{
+	background-image:url(../images/icon/16/arrow-down.png) !important;
+}
+
+.icon-rewind{
+	background-image:url(../images/icon/16/control-rewind.png) !important;
+}
+
+.icon-phase{
+	background-image:url(../images/icon/16/control-phase.png) !important;
+}
+
+.icon-page-copy{
+	background-image:url(../images/icon/16/page-copy.png) !important;
+}
+
+.icon-page-gear{
+	background-image:url(../images/icon/16/page-gear.png) !important;
+}
+
+.grid-cell-male{
+	background-image:url(../images/icon/16/male.png); background-repeat :no-repeat; padding-left:20px;
+}
+.grid-cell-female{
+	background-image:url(../images/icon/16/female.png); background-repeat :no-repeat; padding-left:20px;
+}
+.icon-dw{
+	background-image:url(../images/dingwei.gif) !important;
+}
+.icon-td{
+	background-image:url(../images/0.gif) !important;
+}
+.icon-star{
+	background-image:url(../images/icon/16/xx.gif); background-repeat :no-repeat; padding-left:20px;
+}
+/*********************************************************/
+.tblist{
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+	border:1px solid #ddd;
+	color:#333;
+}
+.tblist th{
+	border:1px solid #f1f1f1;
+	background-color:#d5e3e2;
+	font-size:12px;
+	overflow: hidden;
+	/*text-overflow: ellipsis;*/
+	white-space:   nowrap;
+	line-height:20px;
+	text-align:center;
+}
+.tblist td{
+	border:1px solid #f1f1f1;
+	padding : 5;
+	font-size:12px;
+	height:20px;
+	line-height:22px;
+	text-align:center;
+	overflow:hidden;
+	/*text-overflow: ellipsis;*/
+	white-space: nowrap;
+}

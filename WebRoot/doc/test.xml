@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 本用例仅供参考,validation和execSql必须分开文件 -->
+<validation >
+	<property field="USER_CODE" method="reg" msg="员工账号不能为空!" reg="required" ></property>
+	<property field="USER_NAME" method="reg" msg="员工姓名不能为空!" reg="required" ></property>
+	<property field="USER_CODE" method="database" msg="编码必须唯一" sql="select count(1) from sys_user_tab where user_code=#{code}" ></property>
+</validation>
+
+<mapper>
+    <sql     key="urltab" 
+            operator="execute" 
+        >
+        update sys_user_tab set USER_CODE=#{USER_CODE}, USER_NAME=#{USER_NAME}, 
+        ID_CARD_NO=#{ID_CARD_NO}, MOBILE=#{MOBILE}, EMAIL=#{EMAIL}, REMARK=#{REMARK}
+        where USER_ID=#{USER_ID}
+    </sql>
+</mapper>
+<mapper>
+    <sql     key="urltab" 
+            operator="query" 
+            resultType="list" 
+        >
+        select 
+            a.* 
+        from sys_user_tab a
+        where  1=1 
+	<isNotEmpty property="user_code">
+        and user_code like '%${user_code}%'
+    </isNotEmpty>
+	<isNotEmpty property="user_name">
+        and user_name like '%${user_name}%'
+    </isNotEmpty>
+    </sql>
+</mapper>
+<mapper>
+    <sql     key="urltab" 
+            operator="execute" 
+        >
+        insert into sys_user_tab(USER_CODE, USER_NAME, USER_PWD,SEX ,ID_CARD_NO, MOBILE, EMAIL, REMARK, ACCOUND)
+		VALUES(#{USER_CODE},#{USER_NAME},md5('123456'),1,#{ID_CARD_NO},#{MOBILE},#{EMAIL},#{REMARK},#{ACCOUND})
+    </sql>
+</mapper>
+<mapper>
+    <sql     key="urltab" 
+            operator="query" 
+            resultType="map" 
+        >
+        select 
+            a.* 
+        from sys_user_tab a
+        where  user_id=#{USER_ID}
+    </sql>
+</mapper>
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper>
+    <sql key="update_stall_contract" operator="execute">
+    update stall_contract_tab
+    set
+       rent_id = #{RENT_ID},
+       stall_rent = #{STALL_RENT},
+       rental = #{RENTAL},
+       water_charge = #{WATER_CHARGE},
+       electri_charge = #{ELECTRI_CHARGE},
+       hygiene_charge = #{HYGIENE_CHARGE},
+       net_charge = #{NET_CHARGE},
+       pay_time = #{PAY_TIME},
+       start_time = to_date(#{START_TIME},'yyyy-mm-dd'),
+       end_time = to_date(#{END_TIME},'yyyy-mm-dd'),
+       validity_time = to_date(#{VALIDITY_TIME},'yyyy-mm-dd'),
+       assure_charge = #{ASSURE_CHARGE},
+       penal_charge = #{PENAL_CHARGE},
+       contract_desc = #{CONTRACT_DESC},
+       contract_code = #{CONTRACT_CODE},
+       contract_title = #{CONTRACT_TITLE}
+ where contract_id = #{CONTRACT_ID}
+    </sql>
+    <sql key="update_stallInfo_status_byContractId" operator="execute">
+        update stall_info_tab info
+        set info.stall_status=1
+        where stall_id in (select stall_id from stall_rent_tab rent where rent.contract_id=#{CONTRACT_ID}) 
+    </sql>
+    <sql key="delete_stall_rent_byContractId" operator="execute">
+        delete from stall_rent_tab
+        where contract_id =#{CONTRACT_ID}
+    </sql>
+    <sql key="stall_rent_insert" operator="execute" iterfields="STALL_ID" iterfieldsplit=",">
+        insert into stall_rent_tab
+            (stall_id, contract_id, tenant_id)
+        values
+            (#{STALL_ID}, #{CONTRACT_ID}, $_CRU_TENANT_ID_$)
+    </sql>
+    
+    
+    
+    <sql key="stall_infoStatus_update" operator="execute" iterfields="STALL_ID" iterfieldsplit=",">
+        update stall_info_tab
+            set stall_status=3
+        where stall_id=#{STALL_ID}
+    </sql>
+    
+    <sql operator="insert_file" fileindex="" module="1" batchid="ATTACH_ID"/>
+    <sql operator="del_file" fileindex="" deltype="1"/>
+</mapper>

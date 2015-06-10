@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <title>welcome</title>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<link rel="stylesheet" type="text/css" href="./css/index.css" />
+	<script type="text/javascript">
+	</script>
+  </head>
+  <body style="background:url(./images/gd_bg.jpg) no-repeat bottom left; background-color:#f3f8fe; margin:0; padding:0;">
+    <div style="padding-left: 100px; padding-top: 80px;">
+    	<div style="color:red;font-size:16px;" id="userInfo"></div>
+    	<div style="padding-top:10px;">
+	    	您可以:
+	    	&nbsp;
+	    	<a style="cursor:hand; padding-left:20px; background:url(./images/xx.gif) no-repeat;" onclick="javascript:parent.userQuickMenuConfig()">配置快捷入口</a>
+	    	&nbsp;
+	    	<a style="cursor:hand;" onclick="parent.showPersonInfo()"><img src='./images/gr.gif'>&nbsp;查看个人信息</a>
+	    	&nbsp;<a style="cursor:hand;" onclick="javascript: parent.pwdModForm.form.reset(); parent.pwdModWin.show();">
+	    		<img src='./images/mm.gif'>&nbsp;修改密码</a>
+	    	&nbsp;
+	    	<a id="dlManual" href="">
+	    		<img src='./images/tb01.gif' style="border:0;">&nbsp;下载使用手册</a>
+	    	&nbsp;
+	    	<a href="logout.do"><img src='./images/tc.gif' style="border:0;">&nbsp;退出登录</a>
+	    </div>
+	    <div id="taskTip" style="padding-top:10px;"></div>
+    </div>
+  </body>
+</html>

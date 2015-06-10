@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://itest.56913.com:20080/xsd/validations.xsd">
+<validation >
+	<!--普通元素验证-->
+	<property field="name" method="reg" msg="姓名不能为空，必须在5~100个字符之间!" required="true" reg="required" maxlength="100" minlength="5"></property>
+	<property field="code" method="reg" msg="编码不能为空!" required="true" reg="required" ></property>
+	<!--email可以为空，有填写必须进行验证有效性！-->
+	<property field="email" method="reg" msg="email填写有误" required="false" reg="email" ></property>
+	<!--编码必须唯一！ 查询结果为0 或者 1 ，1代表条件满足，验证失败；0代表条件不满足，验证通过-->
+	<property field="code" method="database" msg="编码必须唯一" sql="select count(1) from sys_user_tab where code=#{code,string} and user_id!=#{userid,int}" ></property>
+</validation>
+</mappers>
+	 *			required : 非空，表单值至少要有一个非空格，制表符，换行符
+	 *			email : 邮件
+	 *			phone : 电话号码
+	 *			mobile : 手机号码
+	 *			url : url地址
+	 *			idcard :身份证
+	 *			currency : 日期  
+	 *			posiint : 正整数
+	 *			number : 数字
+	 *			zip : 邮政信箱   
+	 *			qq : qq号码
+	 *			integer : 整数 
+	 *			double : 浮点数
+	 *			posi_float : 正浮点数
+	 *			no_negative_float : 不小于浮点数
+	 *			posi_number : 正数(可以带小数点)
+	 *			english : 英文字母
+	 *			barcode : 英文字母+汉字
+	 *			chinese : 汉字
+	 *			unsafe : 
+	 *			allphone:所有电话
+	 *			ipaddr:ip地址
+	"required" : /^[\s\S]*\S[\s\S]*$/,
+	"email" : /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/,
+	"phone" : /^((\(\d{3}\))|(\d{3}\-))?(\(0\d{2,3}\)|0\d{2,3}-)?[1-9]\d{6,7}$/,
+	"mobile" : /^((\(\d{3}\))|(\d{3}\-))?13\d{9}$/,
+	"url" : /^http:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/,
+	"idcard" : /^\d{15}(\d{2}[A-Za-z0-9])?$/,
+	"currency":/^(\d{4})\-(\d{2})\-(\d{2})$/, 
+	"posiint":/^[0-9]*[1-9][0-9]*$/,
+	"number" : /^\d+$/,
+	"zip" : /^[1-9]\d{5}$/,
+	"qq" : /^[1-9]\d{4,8}$/,
+	"integer" : /^[-\+]?\d+$/,
+	"double" : /^(-|((-?\d+)(\.\d+)?)|(-?\d+)\.)$/,
+	"posi_float":/^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/,
+	"no_negative_float":/^(([0-9]+\.[0-9]*[0-9][0-9]*)|([0-9]*[0-9][0-9]*\.[0-9]+)|([0-9]*[0-9][0-9]*))$/,
+	"posi_number":/^[0-9]+[.][0-9]{0,3}$/,
+	"english" : /^[A-Za-z]+$/,
+	"barcode":/^[A-Za-z0-9]+$/,
+	"chinese" : /^[\u0391-\uFFE5]+$/,
+	"unsafe" : /^(([A-Z]*|[a-z]*|\d*|[-_\~!@#\$%\^&\*\.\(\)\[\]\{\}<>\?\\\/\'\"]*)|.{0,5})$|\s/,
+	"allphone" : /^(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}/,
+	"ipaddr" : /^([1-9]|[1-9]\d|1\d{2}|2[0-1]\d|22[0-3])(\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])){3}$/

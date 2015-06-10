@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mappers xmlns="http://www.weimingfj.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://itest.56913.com:20080/xsd/mappers.xsd">
+<mapper id="XXX" author="www">
+	<!-- 
+		**key：在本文件中唯一，英文字符+数字组合，可以为空
+		**operator：select/insert_file/del_file/execute;四个操作,默认为execute
+		**iterfields：迭代的字段，和iterchar共同使用，iterchar不为空时，按iterchar进行分割生成多条语句。实际值为form提交的参数名称，可以是多个，多个用“,”分割，如userid,privid
+		**iterfieldsplit:隔离字段
+		**filewname:表单上附件控件名称，用于附件上传
+  		-->
+    <sql 
+    		key="demoResult" 
+            operator="execute"
+        >
+        insert into sys_url_tab
+		  (url_id, priv_id, module_id, url_type, title, service_name, page, validation, exec_sql, log_modify, remark, add_user, send_type)
+		values
+		  (SYS_URL_ID_SEQ.NEXTVAL, #{PRIV_ID}, #{MODULE_ID}, 1, 
+		  	#{TITLE}, #{SERVICE_NAME}, #{PAGE}, #{VALIDATION}, #{EXEC_SQL}, '', #{REMARK}, #{ADD_USER}, 1});
+    </sql>
+</mapper>
+
+<mapper id="123" author="www">
+    <sql 
+    		key="insert_sys_url" 
+            operator="execute"
+        >
+        insert into sys_url_tab
+		  (url_id, priv_id, module_id, url_type, title, service_name, page, validation, exec_sql, log_modify, remark, add_user, send_type)
+		values
+		  (SYS_URL_ID_SEQ.NEXTVAL, #{PRIV_ID}, #{MODULE_ID}, 1, #{TITLE}, #{SERVICE_NAME}, #{PAGE}, #{VALIDATION}, #{EXEC_SQL}, '', #{REMARK}, #{ADD_USER}, 1)
+    </sql>
+</mapper>
+
+<mapper id="123" author="www">
+    <sql 
+    		key="insert_sys_url" 
+            operator="select"
+        >
+        select SYS_URL_ID_SEQ.nextval test_seq_value from dual 
+    </sql>
+    <sql 
+    		key="update_sys_url" 
+            operator="execute"
+        >
+        update sys_url_tab
+		   set 
+		       url_id=#{test_seq_value} 
+		       priv_id = #{PRIV_ID},
+		       module_id = #{MODULE_ID},
+		       title =#{TITLE},
+		       service_name = #{SERVICE_NAME},
+		       page = #{PAGE},
+		       validation = #{VALIDATION},
+		       exec_sql = #{EXEC_SQL},
+		       remark = #{REMARK},
+		       add_user = #{ADD_USER}
+		 where url_id = #{URL_ID}
+    </sql>
+</mapper>
+
+
+<mapper id="123" author="www">
+    <sql 
+    		key="update_sys_url" 
+            operator="execute"
+            iterfields="ids"
+            iterfieldsplit=","
+        >
+        update sys_url_tab set is_del='Y' where url_id=#{ids}
+        delete from  sys_url_tab where url_id=#{ids}
+    </sql>
+</mapper>
+
+<mapper id="123" author="www">
+    <sql 
+    		key="update_sys_url" 
+            operator="execute"
+        >
+         update sys_url_tab set is_del='Y' where url_id in '${ids}'
+         
+        delete from  sys_url_tab where url_id in '${ids}'
+    </sql>
+</mapper>
+</mappers>

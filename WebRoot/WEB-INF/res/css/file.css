@@ -1,0 +1,22 @@
+.fileupload_table{
+	font-size: 9pt;
+   	font-family: 宋体, helvetica, sans-serif;
+	background: #ffffff;
+	/*border-collapse: collapse; */
+}
+.fileupload_table td{
+	border-top: #30b7f5 0px solid;
+	border-bottom: #30b7f5 0px solid;
+	border-right: #30b7f5 0px solid;
+	border-left: #30b7f5 0px solid;		
+}
+.fileupload_table_title{
+	
+}
+.btn_deleteFile{
+  	border: 0px; 
+	cursor: pointer;
+	background:url(../img/btn_deleteFile.gif);
+	height: 16px;
+	width:16px;
+}

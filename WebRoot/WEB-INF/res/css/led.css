@@ -1,0 +1,76 @@
+* {
+	margin: 0;
+	padding: 0
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	min-height: 400px;
+	font-size: 14px;
+	/*line-height: 19px;*/
+	font-family: "宋体";
+	background-color: #000000;
+	color: red;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table tr td {
+	line-height: 18px;
+	border-color: red;
+}
+
+.scroll_div {
+	width: 440px;
+	margin: 0 auto;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.scroll_div a:hover {
+	color: #00DD00
+}
+
+.scroll_div a {
+	color: #EEEE00;
+	margin-right: 5px;
+	text-decoration: none;
+}
+
+.scroll_div a img {
+	border: none;
+	vertical-align: middle;
+}
+.carBlack {
+	border-color: black;
+	color: black;
+}
+.carRed {
+	border-color: red;
+	color:red;
+}
+#led_t,tr,td {
+	border-color: red;
+	color:red;
+}
+
+#led_t tr {
+	text-align: center;
+	
+}
+
+#hy_t {
+	border-color: red;
+}
+
+#scroll_begin,#scroll_end,#scroll_begin ul,#scroll_end ul,#scroll_begin ul li,#scroll_end ul li
+	{
+	display: inline;
+}
+
+.hide {
+	display: none
+}
