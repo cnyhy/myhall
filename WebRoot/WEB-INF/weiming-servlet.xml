@@ -66,8 +66,8 @@
 	<task:annotation-driven/> 
 	<context:annotation-config/>  
     <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/> 
-    <mvc:resources location="images/" mapping="images/**"/>
-    <mvc:resources location="pic/" mapping="pic/**"/>
+    <!-- <mvc:resources location="images/" mapping="images/**"/>
+    <mvc:resources location="pic/" mapping="pic/**"/> -->
     <mvc:resources mapping="#{initPathExposer.resRoot}/**"
 		location="/WEB-INF/res/" />
 </beans>

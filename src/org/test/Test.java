@@ -31,12 +31,12 @@ public class Test {
 		//String aa = "select '$_UUID_$' owner_seq_id from dual";
 		//System.out.println(aa.replace(Environment.UUID, "bbb"));
 		//	testEasyUITreeJson();
-
-			String url = "地方sdfds";
+			System.out.println(System.currentTimeMillis());//
+			/*String url = "地方sdfds";
 			String aurl = java.net.URLEncoder.encode(url, Environment.ENCODING);
 			System.out.println(aurl);
 			String burl = java.net.URLDecoder.decode(aurl, Environment.ENCODING);
-			System.out.println(burl);
+			System.out.println(burl);*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

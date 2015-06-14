@@ -6,14 +6,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -25,15 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-import net.sf.json.util.CycleDetectionStrategy;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.hmit.rest.client.cpm.dto.UserDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,7 +38,6 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.weimingfj.common.cache.GlobalCache;
-import com.weimingfj.common.dao.IJdbcDao;
 import com.weimingfj.common.exception.CustomException;
 import com.weimingfj.common.form.RequestDataForm;
 import com.weimingfj.common.form.ResponseDataForm;
@@ -67,24 +58,19 @@ import com.weimingfj.hall.cache.UserPrivCache;
 @Controller
 @RequestMapping("/topic")
 public class TopicController extends BaseController{
-	protected static Logger logger = Logger.getLogger(TopicController.class);
-
-	@Autowired
-	private IJdbcDao jdbcDao;
-
+	
 	@RequestMapping(value = "/{id}")
 	public String topic(@PathVariable String id, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		RequestDataForm requestDataForm = getRequestDataForm(id, request, response);
+		RequestDataForm requestDataForm = this.getRequestDataForm(id, request, response);
 		Map<String, Object> urlSqlMap = requestDataForm.getUrlSqlMap();
-		String service = MapUtils.getString(urlSqlMap, "SERVICE_NAME");
+		//String service = "";//MapUtils.getString(urlSqlMap, "SERVICE_NAME");
 		String title = MapUtils.getString(urlSqlMap, "TITLE");
 		//保存操作日志
 		//addOperateLog(request, id, title);
-		
-		if (PubFun.isBlankOrNull(service)) {// service为空，直接跳转到页面
+		//if (PubFun.isBlankOrNull(service)) {// service为空，直接跳转到页面
 			return MapUtils.getString(urlSqlMap, "PAGE");
-		} else {
+		/*} else {
 			request.setAttribute(Environment.URL_SQL_MAP, urlSqlMap);// add
 			WebApplicationContext ctx = WebApplicationContextUtils
 					.getWebApplicationContext(request.getSession()
@@ -97,7 +83,7 @@ public class TopicController extends BaseController{
 				page = MapUtils.getString(urlSqlMap, "PAGE");
 			}
 			return page;
-		}
+		}*/
 	}
 	@RequestMapping(value = "/login")
 	public void login(HttpServletRequest request,
@@ -122,20 +108,15 @@ public class TopicController extends BaseController{
 			String basePath = "";
 			String returnUrl=request.getParameter("returnUrl");
 			if(StringUtils.isEmpty(returnUrl)){
-				UserSessionBean usb = (UserSessionBean)request.getSession().getAttribute(Environment.SESSION_USER_LOGIN_INFO);
-				//if("2".equals(usb.getUserInfo().get("USER_TYPE").toString())){
-					basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/topic/admin";
-				/*}
-				else{
-					basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path + "/index.jsp";
-				}*/
+				//UserSessionBean usb = (UserSessionBean)request.getSession().getAttribute(Environment.SESSION_USER_LOGIN_INFO);
+				basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/topic/admin";
 				response.sendRedirect(basePath);
 			}else{
 				response.sendRedirect(returnUrl);
 			}
+		}
 	}
-	}
-	@RequestMapping(value = "/uploadImg/{id}")
+	/*@RequestMapping(value = "/uploadImg/{id}")
 	public @ResponseBody Object uploadImg(@PathVariable String id, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		RequestDataForm requestDataForm = getRequestDataForm(id, request, response);
@@ -159,7 +140,7 @@ public class TopicController extends BaseController{
 			m.put("url", request.getContextPath() + "/topic/getFile/" + fileid);
 			return m;
 		}
-	}	
+	}	*/
 	/**
 	 * 返回json格式数据,返回类型可以是string，map，list，请将xmlresultType设置成正确的格式
 	 * 
@@ -175,11 +156,11 @@ public class TopicController extends BaseController{
 			HttpServletResponse response) throws Exception {
 		RequestDataForm requestDataForm = getRequestDataForm(id, request, response);
 		Map<String, Object> urlSqlMap = requestDataForm.getUrlSqlMap();
-		String service = MapUtils.getString(urlSqlMap, "SERVICE_NAME");
+		String service = "ajaxService";//MapUtils.getString(urlSqlMap, "SERVICE_NAME");
 		requestDataForm.setUrlSqlMap(urlSqlMap);
-		if (null == service || "".equals(service)) {
+		/*if (null == service || "".equals(service)) {
 			service = "ajaxService";
-		}
+		}*/
 		try {
 			WebApplicationContext ctx = WebApplicationContextUtils
 					.getWebApplicationContext(request.getSession()
@@ -205,11 +186,11 @@ public class TopicController extends BaseController{
 	Object exec(@PathVariable String id, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		RequestDataForm requestDataForm = getRequestDataForm(id, request, response);
-		Map<String, Object> urlSqlMap = requestDataForm.getUrlSqlMap();
-		String service = MapUtils.getString(urlSqlMap, "SERVICE_NAME");
-		if (null == service || "".equals(service)) {
+		//Map<String, Object> urlSqlMap = requestDataForm.getUrlSqlMap();
+		String service = "execService";//MapUtils.getString(urlSqlMap, "SERVICE_NAME");
+		/*if (null == service || "".equals(service)) {
 			service = "execService";
-		}
+		}*/
 		Map<String, Object> returnMap = new HashMap<String, Object>();
 		
 		try {
@@ -255,12 +236,12 @@ public class TopicController extends BaseController{
 		//System.out.println("-------------"+request.getParameter("page"));
 		//System.out.println("-------------"+request.getParameter("rows"));
 		RequestDataForm requestDataForm = getRequestDataForm(id, request, response);
-		Map<String, Object> urlSqlMap = requestDataForm.getUrlSqlMap();
-		String service = MapUtils.getString(urlSqlMap, "SERVICE_NAME");
-		if (null == service || "".equals(service)) {
+	//	Map<String, Object> urlSqlMap = requestDataForm.getUrlSqlMap();
+		String service = "queryService";//MapUtils.getString(urlSqlMap, "SERVICE_NAME");
+		/*if (null == service || "".equals(service)) {
 			service = "queryService";
 		}
-		
+		*/
 		try {
 			WebApplicationContext ctx = WebApplicationContextUtils
 					.getWebApplicationContext(request.getSession()
@@ -300,12 +281,12 @@ public class TopicController extends BaseController{
 	Object load(@PathVariable String id, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		RequestDataForm requestDataForm = getRequestDataForm(id, request, response);
-		Map<String, Object> urlSqlMap = requestDataForm.getUrlSqlMap();
-		String service = MapUtils.getString(urlSqlMap, "SERVICE_NAME");
-		logger.debug("-service_name-="+service);
-		if (null == service || "".equals(service)) {
+		//Map<String, Object> urlSqlMap = requestDataForm.getUrlSqlMap();
+		String service = "ajaxService";//MapUtils.getString(urlSqlMap, "SERVICE_NAME");
+		//logger.debug("-service_name-="+service);
+		/*if (null == service || "".equals(service)) {
 			service = "ajaxService";
-		}
+		}*/
 		try {
 			WebApplicationContext ctx = WebApplicationContextUtils
 					.getWebApplicationContext(request.getSession()
@@ -372,79 +353,10 @@ public class TopicController extends BaseController{
         return null;
 	}
 	
-	
-	private RequestDataForm getRequestDataForm(String id,
-			HttpServletRequest request, HttpServletResponse response) throws Exception {
-		logger.debug("***************************");
-		logger.debug("enter topic");
-		logger.debug("***************************");
-		// 权限
-		// 查找对应的URL处理参数
-		Map<String, Object> urlSqlMap = jdbcDao.queryForMap(
-				"select * from sys_url_tab t where t.url_id=?",
-				new Object[] { id });
-		if (urlSqlMap == null || urlSqlMap.size() == 0) {
-			throw new CustomException(
-					"error! no url defined!Please insert a record into the table sys_url_tab.");
-		}
-		
-		RequestDataForm requestDataForm = RequestUtils
-				.getRequestDataForm(request);
-		requestDataForm.setUriId(id);
-		requestDataForm.setUrlSqlMap(urlSqlMap); 
-		requestDataForm.setUserSession((UserSessionBean) request.getSession()
-				.getAttribute(Environment.SESSION_USER_LOGIN_INFO)); 
-		requestDataForm.setRequest(request);
-		requestDataForm.setResponse(response);
-		return requestDataForm;
-	}
-	
-	/**
-	 * 添加操作日志(在sys_log_tab中添加操作记录)
-	 */
-	/**
-	 * {USER_ID=1, USER_CODE=admin, USER_PWD=36680a906090850d18c1d47d6db2662c, 
-	 * USER_TYPE=2, USER_NAME=超级管理员, SEX=1, ID_CARD_NO=, MOBILE=, TOUCH_PHONE=, 
-	 * EMAIL=, JOIN_DATE=2013-01-17, STALL_NO=, COMPANY=高速物流园, BUSINESS=, IS_DISABLED=Y, 
-	 * REMARK=, CREATE_TIME=2014-09-18 10:39:44.0, DEPT_ID=2, DEPT_NAME=企划部}
-	 */
-	public void addOperateLog(HttpServletRequest request, String id, String title){
-		
-		String ip = request.getRemoteAddr();//获取远程请求ip
-		int port = request.getRemotePort();//获取远程请求端口
-//		HttpSession session = request.getSession();
-//		UserSessionBean userSession = (UserSessionBean) session.getAttribute("userSession");
-		UserSessionBean userSession = (UserSessionBean)request.getSession().getAttribute(Environment.SESSION_USER_LOGIN_INFO);
-		String user_id = "";
-		String user_name = "";
-		String real_name = "";
-		if(userSession==null){
-			logger.error("userSession is null--===========================");
-			/*String username = Util.getCasUserName(request);
-			UserDTO user = Util.getUser(username);
-			user_id = String.valueOf(user.getUserId());
-			user_name = user.getUsername();
-			real_name = user.getRealName();*/
-		} else {
-			user_id = userSession.getUserId();
-			user_name = userSession.getUserCode();
-			real_name = userSession.getUserName();
-		}
-		try {
-			String insertSql = "insert into sys_log_tab (USER_ID, USER_NAME, REAL_NAME, OPERATE_TIME, OPERATE_ID, OPERATE_TITLE, OPERATE_IP, OPERATE_PORT) " +
-					"values('" + user_id + "', '" + user_name + "', '" + real_name + "', now(), '" +  id + "', '" + title + "', '" + ip + "', " + port +")";
-			jdbcDao.execute(insertSql, null);
-			System.out.println(insertSql);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-	}
 	@RequestMapping(value="/genUrlFile")
 	public void genUrlFile(HttpServletRequest request,HttpServletResponse response,String privId, String urlFileName){
-		System.out.println("priv_id ===="+privId+",,urlFileName=========="+urlFileName);
 		String xmlHead = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 		List<Map<String, Object>> urlSqlList = jdbcDao.queryForList(
-				//"select url_id, title, validation, exec_sql, create_man from sys_url_tab where module_id = ? and service_name != ''",
 				"select url_id, title, validation, exec_sql, add_user from sys_url_tab where add_user = 'yhy' and service_name != ''",
 				new Object[] { });
 		StringBuffer validSb = new StringBuffer("");
@@ -555,7 +467,6 @@ public class TopicController extends BaseController{
 	}
 	/**
 	 * 编辑器文件上传
-	 * 
 	 * @param request
 	 * @param response
 	 * @throws Exception
@@ -578,7 +489,7 @@ public class TopicController extends BaseController{
 			boolean flag = true;
 			String imgName = request.getParameter("imageName");
 			if(null==imgName||"".equals(imgName)){
-				imgName=CommonUtils.getFormatDate(new Date(), "yyyyMMddhhmmss");
+				imgName = CommonUtils.getFormatDate(new Date(), "yyyyMMddhhmmss");
 			}
 			String dicLog = request.getParameter("type");
 			String message = "";
@@ -587,12 +498,13 @@ public class TopicController extends BaseController{
 					message = "上传文件内容太大，请上传2M以内的图片";
 					flag = false;
 				} else {
-					String suffix = imgFile.getOriginalFilename().substring(
-							imgFile.getOriginalFilename().lastIndexOf(".")); // 获取文件后缀名
+					String suffix = (imgFile.getOriginalFilename().substring(
+							imgFile.getOriginalFilename().lastIndexOf("."))).toLowerCase(); // 获取文件后缀名
 					imgName += suffix; // 生成文件名
 					if (!suffix.equalsIgnoreCase(".jpg")
-							&& !suffix.equalsIgnoreCase(".png")) {
-						message = "上传图片格式不正确，请上传 .jpg 或者 .png 图片";
+							&& !suffix.equalsIgnoreCase(".png")
+							&& !suffix.equalsIgnoreCase(".gif")) {
+						message = "上传图片格式不正确，请上传 .jpg 或者 .png 或者 .gif 图片";
 						flag = false;
 					} else {
 						String savepath = request.getSession()
@@ -625,6 +537,120 @@ public class TopicController extends BaseController{
 			if (flag) {
 				map.put("error", 0);
 				map.put("url", request.getContextPath()+"/pic/"+dicLog + "/" + imgName);
+			} else {
+				map.put("error", 1);
+				map.put("message", message);
+			}
+			out.print(JSONObject.fromObject(map).toString());
+			out.flush();
+			out.close();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			map.put("error", 1);
+			map.put("message", e1.getMessage());
+			out.print(JSONObject.fromObject(map).toString());
+			out.flush();
+			out.close();
+		}
+	}
+	
+	/**
+	 * 文件上传
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+	public void FileUpload(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		// 验证用户是否登录
+		PrintWriter out = response.getWriter();
+		try {
+			response.setCharacterEncoding("UTF-8");
+			//RequestDataForm requestDataForm = RequestUtils.getRequestDataForm(request);
+			File uploadFile = (File)request.getAttribute("uploadFile");
+			String filePath = request.getParameter("filePath");
+			String fileType = request.getParameter("type");
+			
+			String fileName = "";
+			String suffix = "";
+			String message = "";
+			boolean flag = true;
+			String fileSize = "";
+			int fileId = Integer.parseInt(jdbcDao.queryForString("select max(file_id) from t_file", null, "1")) + 1;
+			logger.debug("==========="+fileId);
+			if (uploadFile != null) {
+				if (uploadFile.length() > 10*1024*1024) {
+					message = "上传文件内容太大，请上传10M以内的文件！";
+					flag = false;
+				} else {
+					fileSize = PubFun.getFomatFileSize(uploadFile.length());
+					suffix = (filePath.substring(filePath.lastIndexOf(".")+1)).toLowerCase(); // 获取文件后缀名
+					fileName = filePath.substring(filePath.lastIndexOf("\\")+1, filePath.lastIndexOf("."));
+					{
+						String savepath = request.getSession()
+								.getServletContext()
+								.getRealPath("/file/" + File.separator + fileType);
+						File createFile = new File(savepath);
+						if (!createFile.exists()) {
+							createFile.mkdirs();
+						}
+						BufferedInputStream bis = new BufferedInputStream(new FileInputStream(uploadFile));   
+						BufferedOutputStream bos = null;   
+						bos = new BufferedOutputStream(new FileOutputStream(savepath));//为以防万一，以后写文件的路径尽量写成正双斜杠的   
+						// 从源文件中取数据，写到目标文件中   
+						byte[] buff = new byte[8192];   
+						for (int len = -1; (len = bis.read(buff)) != -1;) {   
+						    bos.write(buff, 0, len);   
+						}
+						bos.flush(); 
+						if (bis != null) {   
+		                    try {   
+		                        bis.close();   
+		                    } catch (IOException ie) {   
+		                        ie.printStackTrace();   
+		                    }   
+		                }   
+		                if (bos != null) {   
+		                    try {   
+		                        bos.close();   
+		                    } catch (IOException ie) {   
+		                        ie.printStackTrace();   
+		                    }   
+		                }
+					}
+
+				}
+			} else {
+				flag = false;
+				message = "请选择图片";
+			}
+			if (flag) {
+				map.put("error", 0);
+				map.put("fileId", fileId);
+				map.put("fileName", fileName);
+				map.put("fileType", suffix);
+				map.put("fileSize", fileSize);
+				//
+				UserSessionBean userSession = (UserSessionBean)request.getSession().getAttribute(Environment.SESSION_USER_LOGIN_INFO);
+				String user_id = "";
+				String user_name = "";
+				if(userSession==null){
+					logger.error("userSession is null--===========================");
+				} else {
+					user_id = userSession.getUserId();
+					user_name = userSession.getUserName();
+				}
+				try {
+					String insertSql = "insert into t_file (file_id, file_title, file_type, file_size, create_time, create_user_id, create_user_name) " +
+							"values(?, ?, ?, ?, now(), ?, ?)";
+					jdbcDao.execute(insertSql, new Object[]{fileId, fileName, suffix, fileSize, user_id, user_name});
+					logger.debug("insert file======================="+insertSql);
+				} catch (Exception e) {
+					e.printStackTrace();
+				} 
+				
 			} else {
 				map.put("error", 1);
 				map.put("message", message);

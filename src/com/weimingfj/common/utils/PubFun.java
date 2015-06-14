@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,7 +42,20 @@ import net.sf.json.JsonConfig;
 public class PubFun {
 	
 	
-	
+	public static String getFomatFileSize(long fsize){
+		String sss = "";
+		if(fsize < 1*1024*1024){
+			double dbe = fsize/1024;
+			DecimalFormat df=new DecimalFormat("#.00");
+			sss = df.format(dbe) + " KB";
+		}else{
+			double db=fsize;
+			double dbe = db/1024/1024;
+			DecimalFormat df=new DecimalFormat("#.00");
+			sss = df.format(dbe)+ " MB";
+		}
+		return sss;
+	}
 	/*public static String listToJson(List list){
 		JsonConfig config = JSONLibUtil.configJson();
 		JSONArray jsonArray = JSONArray.fromObject(list, config);

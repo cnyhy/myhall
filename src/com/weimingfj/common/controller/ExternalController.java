@@ -132,7 +132,7 @@ public class ExternalController extends BaseController {
 		}
 		return resultMap;
 	}
-	
+	/*
 	private RequestDataForm getRequestDataForm(String id,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// 权限
@@ -158,7 +158,7 @@ public class ExternalController extends BaseController {
 		requestDataForm.setRequest(request);
 		requestDataForm.setResponse(response);
 		return requestDataForm;
-	}
+	}*/
 }
 
 

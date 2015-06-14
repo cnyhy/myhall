@@ -286,29 +286,12 @@ Ext.onReady(function(){
 		});
 	});
 	
-	//alert(1);
-    var infoContent = new Ext.form.HtmlEditor({
-        fieldLabel: '文章内容',
-        labelAlign: 'top',
-        enableAlignments: true,
-        enableColors: true,
-        enableFont: true,
-        enableFontSize: true,
-        enableFormat: true,
-        enableLinks: false,
-        enableLists: false,
-        enableSourceEdit: false,
-        fontFamilies: ['宋体', '仿宋_GB2312', '黑体', '楷体_GB2312', '新宋体', '方正舒体','华文新魏','华文行楷','隶书'],
-        name : 'info.infoContent',
-        anchor : '99%',
-        height : '600'
-    });
     //
     var uploadForm = new Ext.FormPanel({
 		border: false,
 		enctype:'multipart/form-data',
 		method:'post',
-		url: CTX_PATH +'/topic/uploadFile.do',
+		url: CTX_PATH +'/topic/uploadFile',
 		fileUpload: true,
 		bodyStyle : 'padding:10px;',
 		items: [{
@@ -321,8 +304,8 @@ Ext.onReady(function(){
 				//readOnly:true,
 				fieldLabel: 'ϴ',
 				inputType:'file',
-				id: 'upload',
-				name:'upload'
+				id: 'uploadFile',
+				name:'uploadFile'
 			},{
 				xtype : 'hidden',
 				name : 'filePath',
@@ -346,7 +329,7 @@ Ext.onReady(function(){
 		buttons : [{
 			text : '上传',
 			handler : function() {
-				var upf=Ext.getDom('upload').value;
+				var upf=Ext.getDom('uploadFile').value;
 				if(upf == ""){
 					Ext.MessageBox.alert('提示信息','上传地址为空，请选择！');
 					return;
@@ -357,33 +340,38 @@ Ext.onReady(function(){
                         waitMsg: '正在上传文档文件 ...',
 						success: function(win, o){
 							//alert(o.result.fileId+"---"+o.result.fileTitle+"====");
-							Ext.Msg.alert('提示信息', '上传成功！！！！！');
-							var gStore = fileGrid.store;
-							var rs = new Ext.data.Record();
-							rs.id = o.result.fileId;
-							rs.data = {};
-							rs.data.fileId = o.result.fileId;
-							rs.data.fileTitle = o.result.fileTitle;
-							rs.data.fileType = o.result.fileType;
-							rs.data.fileSize = o.result.fileSize;
-							gStore.add(rs);
-							//设置fileId隐藏字段
-							var fileIds = Ext.getDom("fileIds");
-							var fileIdsArr = [];
-							//alert(fileIds);
-							if(fileIds.value != ''){
-								fileIdsArr = fileIds.value.split("|");
+							console.info(o);
+							var rst = o.result;
+							if(rst.error == 0){
+								Ext.Msg.alert('提示信息', '上传成功！！！！！');
+								var gStore = fileGrid.store;
+								var rs = new Ext.data.Record();
+								rs.id = o.result.fileId;
+								rs.data = {};
+								rs.data.fileId = o.result.fileId;
+								rs.data.fileTitle = o.result.fileName;
+								rs.data.fileType = o.result.fileType;
+								rs.data.fileSize = o.result.fileSize;
+								gStore.add(rs);
+								//设置fileId隐藏字段
+								var fileIds = Ext.getDom("fileIds");
+								var fileIdsArr = [];
+								//alert(fileIds);
+								if(fileIds.value != ''){
+									fileIdsArr = fileIds.value.split(",");
+								}
+								fileIdsArr.push(rs.id);
+								//alert(fileIdsArr.length);
+								fileIds.value = fileIdsArr.join(",");
+								//alert(fileIds.value);
+								//清空上传url
+								//alert(Ext.getDom('upload').outerHTML);
+								//Ext.getDom('upload').outerHTML  = Ext.getDom('upload').outerHTML;
+								fileGrid.view.refresh();
+								uploadWin.hide();
+							}else{
+								Ext.Msg.alert('提示信息', rst.message);
 							}
-							fileIdsArr.push(rs.id);
-							//alert(fileIdsArr.length);
-							fileIds.value = fileIdsArr.join("|");
-							//alert(fileIds.value);
-							//清空上传url
-							//alert(Ext.getDom('upload').outerHTML);
-							//Ext.getDom('upload').outerHTML  = Ext.getDom('upload').outerHTML;
-							
-							fileGrid.view.refresh();
-							uploadWin.hide();
 						},  
 						failure: function(){
 							Ext.Msg.alert('提示信息', '上传失败！！！！！'); 
@@ -404,7 +392,7 @@ Ext.onReady(function(){
     	var co = ds.getCount();
     	var records = ds.getRange(0, co - 1);
     	var fileIds = Ext.getDom("fileIds");
-		var fileIdsArr = fileIds.value.split("|");
+		var fileIdsArr = fileIds.value.split(",");
 		fileIdsArr.remove(id);
     	for(var i=0; i<co; i++){
     		////alert(records[i].id + "----"+ id);
@@ -414,7 +402,7 @@ Ext.onReady(function(){
     		}
     	}
 		fileGrid.view.refresh();
-		fileIds.value = fileIdsArr.join("|");
+		fileIds.value = fileIdsArr.join(",");
 	};
 	var delFileIcon = function(data){
 		return "<div style='text-align:center;'><a href='javascript:void(0);' onclick='delFile("+data+")'><img src='"+RES_PATH+"/images/icon/16/cross.gif"+"'/></a><div>"
@@ -432,13 +420,13 @@ Ext.onReady(function(){
             	uploadWin.show();
             	uploadForm.form.reset();
 			}
-	    },'-'],
+	    }],
         columns: [
         	new Ext.grid.RowNumberer(),
 	        {header:'附件标题', width: 260, dataIndex:'fileTitle'},
 	        {header:'附件类型',dataIndex:'fileType'},
 	        {header:'附件大小',dataIndex:'fileSize'},
-	        {header: "删除", dataIndex:'fileId', width: 30, renderer: delFileIcon}
+	        {header: "删除", dataIndex:'fileId', width: 40, renderer: delFileIcon}
         ]
     });
     //
@@ -557,31 +545,28 @@ Ext.onReady(function(){
 						xtype : 'textfield',
 						fieldLabel:'信息标题',
 						name:'info_title',
-						anchor : '95%',
-						maxLength: 50,
+						anchor : '98%',
+						maxLength: 100,
 						msgTarget: 'under',
 						allowBlank:false
 					},{
 						xtype: "textarea",
 						fieldLabel:'信息内容',
-						maxLength: 200,
+						//maxLength: 200,
 						msgTarget: 'under',
 						id : 'info_content',
 						name:'info_content',
-						anchor : '95%',
+						anchor : '98%',
 						listeners: {
 					        'render': function (f) {
 					            setTimeout(function () {
 					            	//alert(KindEditor);
 					                if (KindEditor) {
 					                    Nceditor = KindEditor.create('#info_content',{
-											items : ['undo', 'redo', '|','quickformat', 'template',
-										    'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
-										    'indent', 'outdent',
-										    'formatblock', 'fontname', 'fontsize', '/',
-										    'forecolor', 'hilitecolor', 'bold',
-										    'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'file',
-										    'table', 'hr','|','fullscreen'],
+											items : ['undo', 'redo', '|','quickformat', 'wordpaste', '|', 
+											'justifyleft', 'justifycenter', 'justifyright', 'indent', 'outdent', 'formatblock', 'fontname', 'fontsize', '|',
+										    'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 
+										    'image', 'file', 'table', 'hr'],
 											resizeType : 2,
 											allowFileManager : true,
 											uploadJson :  CTX_PATH + '/topic/uploadImg?type=II',
@@ -596,7 +581,6 @@ Ext.onReady(function(){
 					        }
 					    }
 					},
-					//infoContent,
 					fileGrid
 				]
 	        }]
@@ -690,11 +674,11 @@ Ext.onReady(function(){
         	new Ext.grid.RowNumberer(),
 	       	new Ext.grid.CheckboxSelectionModel({singleSelect:true}),
 	       	{
-	       		header: "文章标题", dataIndex: 'info_title', sortable : true
+	       		header: "文章标题", width : 200, dataIndex: 'info_title', sortable : true
 	       	}, {
-	       		header: "文章类别", dataIndex: 'info_type_all_path', sortable : false
+	       		header: "文章类别", width : 100, dataIndex: 'info_type_all_path', sortable : false
 	       	}, {
-	       		header: "归属地区", dataIndex: 'area_name', sortable : false
+	       		header: "归属地区", width : 100, dataIndex: 'area_name', sortable : false
 	       	}, {
 	       		header: "状态", dataIndex: 'status', sortable : true, renderer: statusFomat
 	       	}, {
@@ -708,13 +692,13 @@ Ext.onReady(function(){
 	       	}, {
 	       		header: "有否附件", dataIndex: 'has_file', sortable : false, renderer: hasFomat
 	       	}, {
-	       		header: "创建人", dataIndex: 'create_staff_name', sortable : true
+	       		header: "创建人", width : 100, dataIndex: 'create_staff_name', sortable : true
 	       	}, {
-	       		header : "创建时间", dataIndex : 'create_time', sortable : false
+	       		header : "创建时间", width : 100, dataIndex : 'create_time', sortable : false
 	       	}
         ],
         viewConfig: {
-            forceFit:true
+        //    forceFit:true
         },
         loadMask: true,
         tbar: [{
@@ -750,21 +734,9 @@ Ext.onReady(function(){
 						waitTitle : '提示信息',
 						waitMsg : '正在载入...',
 						success : function() {
-							if(Ext.getDom("atTop").value == '1'){
-								Ext.getCmp("atTopCB").setValue(true);
-							}else{
-								Ext.getCmp("atTopCB").setValue(false);
-							}
-							if(Ext.getDom("joinDynamic").value == '1'){
-								Ext.getCmp("joinDynamicCB").setValue(true);
-							}else{
-								Ext.getCmp("joinDynamicCB").setValue(false);
-							}
-							if(Ext.getDom("joinFlash").value == '1'){
-								Ext.getCmp("joinFlashCB").setValue(true);
-							}else{
-								Ext.getCmp("joinFlashCB").setValue(false);
-							}
+							Ext.getCmp("atTopCB").setValue(infoForm.form.getValues()["at_top"] == 1 ? true: false);
+							Ext.getCmp("joinDynamicCB").setValue(infoForm.form.getValues()["join_dynamic"] == 1 ? true: false);
+							Ext.getCmp("joinFlashCB").setValue(infoForm.form.getValues()["join_flash"] == 1 ? true: false);
 							var fileArr = Ext.getDom("fileJsonArr");
 							if(fileArr.value != ''){
 								var fileArrJson = eval(fileArr.value);
@@ -953,10 +925,10 @@ Ext.onReady(function(){
 						queryArr.push("'areaCode':'"+oFields.searchAreaCode.trim()+"'");
 					}
 					if(oFields.searchInfoTitle.trim() != ""){
-						queryArr.push("'infoTitle':'${%}"+ oFields.searchInfoTitle.trim()+"'");
+						queryArr.push("'infoTitle':'"+ oFields.searchInfoTitle.trim()+"'");
 					}
 					if(oFields.searchInfoContent.trim() != ""){
-						queryArr.push("'infoContent':'${%}"+ oFields.searchInfoContent.trim()+"'");
+						queryArr.push("'infoContent':'"+ oFields.searchInfoContent.trim()+"'");
 					}
 					if (queryArr.length > 0)
 						queryStr = "{" + queryArr.join(",") + "}";
@@ -980,7 +952,7 @@ Ext.onReady(function(){
     
 	var viewport = new Ext.Viewport({
 		layout : 'border',
-		items : [searchPanel,grid]
+		items : [searchPanel, grid]
 	});
 	viewport.doLayout();
 	//parent.verifyUserBtn(Ext.getCmp);

@@ -21,9 +21,10 @@ public class InitPathExposer implements ServletContextAware {
 	@Autowired
 	protected IJdbcDao jdbcDao;
 	private ServletContext sc; 
-	Properties propMap=new Properties();
+	//Properties propMap=new Properties();
 
 	public String resRoot;
+	
 	/*public String parkLogoSrc1;
 	public String parkLogoSrc2;
 	
@@ -39,12 +40,11 @@ public class InitPathExposer implements ServletContextAware {
 		/**
 		 * 资源参数初始化
 		 */
-		String version = "" + System.currentTimeMillis();
-		resRoot = "/r-" + version;
+		resRoot = "/r-" + System.currentTimeMillis();
 		sc.setAttribute("ctxPath", sc.getContextPath());
 		sc.setAttribute("resRoot", sc.getContextPath() + resRoot);
-		//sc.setAttribute("driverPath", Environment.DRIVER_PATH);
 		sc.setAttribute("picPath", sc.getContextPath()+"/pic/");
+		sc.setAttribute("filePath", sc.getContextPath()+"/file/");
 //		/**
 //		 * 配置文件读取
 //		 */
